@@ -20,7 +20,7 @@ suite("Unit Tests", function(){
    assert.approximately(ch.getNum("1/2.3mi"), 1/2.3, 0.01)
 
    // convertHandler should correctly return an error on a double-fraction (i.e. 3/2/3)
-   assert.throws(ch.getNum("1/2/3mi"), "invalid number")
+   assert.throws(() => ch.getNum("1/2/3mi"), "invalid number")
 
    // convertHandler should correctly default to a numerical input of 1 when no numerical input is provided
    assert.strictEqual(ch.getNum("mi"), 1)
@@ -34,23 +34,23 @@ suite("Unit Tests", function(){
    assert.strictEqual(ch.getUnit("kg"), "kg")
 
    // convertHandler should correctly return an error for an invalid input unit
-   assert.throws(ch.getUnit("mig"), "invalid unit")
+   assert.throws(() => ch.getUnit("mig"), Error, "invalid unit")
 
    // convertHandler should return the correct return unit for each valid input unit
-   assert.strictEqual(ch.getUnit("mi"), "km")
-   assert.strictEqual(ch.getUnit("km"), "mi")
-   assert.strictEqual(ch.getUnit("gal"), "L")
-   assert.strictEqual(ch.getUnit("L"), "gal")
-   assert.strictEqual(ch.getUnit("lbs"), "kg")
-   assert.strictEqual(ch.getUnit("kg"), "lbs")
+   assert.strictEqual(ch.getReturnUnit("mi"), "km")
+   assert.strictEqual(ch.getReturnUnit("km"), "mi")
+   assert.strictEqual(ch.getReturnUnit("gal"), "L")
+   assert.strictEqual(ch.getReturnUnit("L"), "gal")
+   assert.strictEqual(ch.getReturnUnit("lbs"), "kg")
+   assert.strictEqual(ch.getReturnUnit("kg"), "lbs")
 
    // convertHandler should correctly return the spelled-out string unit for each valid input unit
-   assert.strictEqual(ch.getUnit("mi"), "miles")
-   assert.strictEqual(ch.getUnit("km"), "kilometers")
-   assert.strictEqual(ch.getUnit("gal"), "gallons")
-   assert.strictEqual(ch.getUnit("L"), "liters")
-   assert.strictEqual(ch.getUnit("lbs"), "pounds")
-   assert.strictEqual(ch.getUnit("kg"), "kilograms")
+   assert.strictEqual(ch.spellOutUnit("mi"), "miles")
+   assert.strictEqual(ch.spellOutUnit("km"), "kilometers")
+   assert.strictEqual(ch.spellOutUnit("gal"), "gallons")
+   assert.strictEqual(ch.spellOutUnit("L"), "liters")
+   assert.strictEqual(ch.spellOutUnit("lbs"), "pounds")
+   assert.strictEqual(ch.spellOutUnit("kg"), "kilograms")
 
    // convertHandler should correctly convert gal to L.
    assert.approximately(ch.convert(1, "gal"), 3.78541, 0.01)

@@ -9,12 +9,12 @@ function ConvertHandler() {
       const miToKm = 1.60934
 
       switch (initUnit) {
-         case "gal": {return initNum * galToL}
-         case "L": {return initNum / galToL}
-         case "lbs": {return initNum * lbsToKg}
-         case "kg": {return initNum / lbsToKg}
-         case "mi": {return initNum * miToKm}
-         case "km": {return initNum / miToKm}
+         case "gal": {return Number((initNum * galToL).toFixed(5))}
+         case "L": {return Number((initNum / galToL).toFixed(5))}
+         case "lbs": {return Number((initNum * lbsToKg).toFixed(5))}
+         case "kg": {return Number((initNum / lbsToKg).toFixed(5))}
+         case "mi": {return Number((initNum * miToKm).toFixed(5))}
+         case "km": {return Number((initNum / miToKm).toFixed(5))}
          default: {
             // should be unreachable
             throw new Error("invalid argument for ConvertHandler.convert")
@@ -33,10 +33,10 @@ function ConvertHandler() {
       const x = Number(a)
       if (b) {
          const y = Number(b)
-         if (x && y) {return x / y}
+         if (x > 0 && y > 0) {return x / y}
          else {throw new Error("invalid number")}
       }
-      if (x) {return x}
+      if (x > 0) {return x}
       else {throw new Error("invalid number")}
    }
 
@@ -56,7 +56,7 @@ function ConvertHandler() {
    }
 
    this.getString = function(initNum, initUnit, returnNum, returnUnit) {
-      return `${initNum} ${this.spellOutUnit(initUnit)} converts to ${returnNum.toFixed(5)} ${this.spellOutUnit(returnUnit)}`
+      return `${initNum} ${this.spellOutUnit(initUnit)} converts to ${returnNum} ${this.spellOutUnit(returnUnit)}`
    }  
 
    this.getUnit = function(input) {
@@ -64,7 +64,8 @@ function ConvertHandler() {
       if (!units) {throw new Error("invalid unit")}
       if (extra) {throw new Error("invalid number and unit")}
 
-      switch (units.toLowerCase()) {
+      const a = units.toLowerCase()
+      switch (a) {
          case "gal": {return "gal"}
          case "l": {return "L"}
          case "lbs": {return "lbs"}
@@ -78,7 +79,7 @@ function ConvertHandler() {
    }
 
    this.spellOutUnit = function(unit) {
-      switch (initUnit) {
+      switch (unit) {
          case "gal": {return "gallons"}
          case "L": {return "liters"}
          case "lbs": {return "pounds"}

@@ -8,7 +8,6 @@ module.exports = function (app) {
 
    app.get("/api/convert", (req, res) => {
       const input = req.query.input
-
       try {
          const initNum = ch.getNum(input)
          const initUnit = ch.getUnit(input)
