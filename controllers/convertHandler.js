@@ -1,5 +1,6 @@
 "use strict"
 
+// A file I modified.
 // There"s so much to complain about. But I deleted all of it. Only this recognition of former self-indulgence remains.
 
 function ConvertHandler() {

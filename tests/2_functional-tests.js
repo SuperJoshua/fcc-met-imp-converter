@@ -1,22 +1,63 @@
 "use strict"
 
+// A file I modified.
+
 const chaiHttp = require("chai-http")
-const chai = require("chai")
+const {request, expect} = require("chai")
 let assert = chai.assert
 const server = require("../server")
 
 chai.use(chaiHttp)
 
-// GET requests to /api/convert
 suite("Functional Tests", function() {
-   // convert a valid input such as 10L
+   test("convert a valid input such as 10L", function() {
+      request(server)
+      .get("/api/convert?input=10L")
+      .end(function(err, res) {
+         expect(err).to.be.null
+         assert.strictEqual(res.body.string, "10 liters converts to 2.64172 gallons")
+         done()
+      })
+   })
 
-   // convert an invalid input such as 32g
+   test("convert an invalid input such as 32g", function() {
+      request(server)
+      .get("/api/convert?input=32g")
+      .end(function(err, res) {
+         expect(err).to.be.null
+         assert.strictEqual(res.text, "invalid unit")
+         done()
+      })
+   })
 
-   // convert an invalid number such as 3/7.2/4kg
+   test("convert an invalid number such as 3/7.2/4kg", function() {
+      request(server)
+      .get("/api/convert?input=3/7.2/4kg")
+      .end(function(err, res) {
+         expect(err).to.be.null
+         assert.strictEqual(res.text, "invalid number")
+         done()
+      })
+   })
 
-   // convert an invalid number AND unit such as 3/7.2/4kilomegagram
-   // Kilomegagram? I suppose that'd be a gigagram. (:
+   //Kilomegagram? I suppose that'd be a gigagram. (:
+   test("convert an invalid number AND unit such as 3/7.2/4kilomegagram", function() {
+      request(server)
+      .get("/api/convert?input=3/7.2/4kilomegagram")
+      .end(function(err, res) {
+         expect(err).to.be.null
+         assert.strictEqual(res.text, "invalid number and unit")
+         done()
+      })
+   })
 
-   // convert with no number such as kg
+   test("convert with no number such as kg", function() {
+      request(server)
+      .get("/api/convert?input=kg")
+      .end(function(err, res) {
+         expect(err).to.be.null
+         assert.strictEqual(res.body.string, "1 kilograms converts to 2.20462 pounds")
+         done()
+      })
+   })
 })
