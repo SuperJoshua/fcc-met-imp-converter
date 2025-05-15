@@ -1,7 +1,6 @@
 "use strict"
 
 // A file I modified.
-// There"s so much to complain about. But I deleted all of it. Only this recognition of former self-indulgence remains.
 
 function ConvertHandler() {
    this.convert = function(initNum, initUnit) {
@@ -23,22 +22,50 @@ function ConvertHandler() {
       }
    }
 
+   // I would have done this differently. As it stands, some of the logic is repeated in getUnits because of a silly insistence on a particular error message.
    this.getNum = function(input) {
       const [num, units, extra] = input.split(/([a-z]+)/i)
-      if (!units) {throw new Error("invalid unit")}
       if (extra) {throw new Error("invalid number and unit")}
 
+      let result = 0
+      let bad_number = false
+      let bad_units = false
+
       if (!num) {return 1}
-      const [a, b, c] = num.split(/\//)
-      if (c) {throw new Error("invalid number")}
-      const x = Number(a)
-      if (b) {
-         const y = Number(b)
-         if (x > 0 && y > 0) {return x / y}
+      else {
+         const [na, nb, nc] = num.split(/\//)
+         if (nc) {bad_number = true}
+         else {
+            const x = Number(na)
+            if (nb) {
+               const y = Number(nb)
+               if (x > 0 && y > 0) {result = x / y}
+               else {bad_number = true}
+            }
+            else if (x > 0) {result = x}
+            else {bad_number = true}
+         }
+      }
+
+      if (!units) {bad_units = true}
+      else {
+         const u = units.toLowerCase()
+         switch (u) {
+            case "gal": {break}
+            case "l": {break}
+            case "lbs": {break}
+            case "kg": {break}
+            case "mi": {break}
+            case "km": {break}
+            default: {bad_units = true}
+         }
+      }
+
+      if (bad_number) {
+         if (bad_units) {throw new Error("invalid number and unit")}
          else {throw new Error("invalid number")}
       }
-      if (x > 0) {return x}
-      else {throw new Error("invalid number")}
+      return result
    }
 
    this.getReturnUnit = function(initUnit) {
@@ -62,11 +89,11 @@ function ConvertHandler() {
 
    this.getUnit = function(input) {
       const [num, units, extra] = input.split(/([a-z]+)/i)
-      if (!units) {throw new Error("invalid unit")}
       if (extra) {throw new Error("invalid number and unit")}
+      if (!units) {throw new Error("invalid unit")}
 
-      const a = units.toLowerCase()
-      switch (a) {
+      const u = units.toLowerCase()
+      switch (u) {
          case "gal": {return "gal"}
          case "l": {return "L"}
          case "lbs": {return "lbs"}
